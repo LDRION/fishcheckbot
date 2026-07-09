@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # ==================== BOT SERVICE ====================
+  bot:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    container_name: fishcheckbot
+    restart: unless-stopped
+
+    # Переменные окружения из .env файла
+    env_file:
+      - ../.env
+
+    # Дополнительные переменные для production
+    environment:
+      - NODE_ENV=production
+      - LOG_LEVEL=info
+
+    # Зависимость от MongoDB
+    depends_on:
+      mongo:
+        condition: service_healthy
+
+    # Маппинг логов на хост-машину
+    volumes:
+      - ../logs:/app/logs
+
+    # Сеть для изоляции
+    networks:
+      - fishcheck-net
+
+    # Health check для самого бота
+    healthcheck:
+      test: ['CMD', 'node', '-e', 'process.exit(0)']
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  # ==================== MONGODB SERVICE ====================
+  mongo:
+    image: mongo:7
+    container_name: fishcheckbot-mongo
+    restart: unless-stopped
+
+    # Пробрасываем порт для локального доступа (опционально)
+    ports:
+      - '27017:27017'
+
+    # Persist данные в volume
+    volumes:
+      - mongo-data:/data/db
+
+    # Инициализация БД
+    environment:
+      - MONGO_INITDB_DATABASE=fishcheckbot
+
+    # Сеть
+    networks:
+      - fishcheck-net
+
+    # Health check для MongoDB
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# ==================== NETWORKS & VOLUMES ====================
+networks:
+  fishcheck-net:
+    driver: bridge
+
+volumes:
+  mongo-data:
