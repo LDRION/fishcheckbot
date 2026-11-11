@@ -3,7 +3,7 @@ import { UserData } from './types/index.js';
 
 // Интерфейс для Mongoose документа
 export interface UserDocument extends UserData, Document {}
-export interface UserModel extends Model<UserDocument> {}
+export type UserModel = Model<UserDocument>;
 
 // Определение схемы
 const userSchema = new mongoose.Schema<UserDocument>(

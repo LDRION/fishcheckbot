@@ -5,6 +5,13 @@ import { parseNumericInput, validateActStep } from '../../../services/act/valida
 import { actRepo } from '../../../services/mongodb/repositories/act.repo.js';
 import { userRepo } from '../../../services/mongodb/repositories/user.repo.js';
 import { logger } from '../../../utils/logger.js';
+import type { ActInput, UserData } from '../../../models/types/index.js';
+
+// Состояние заполнения акта в user.temp: шаг формы и уже введённые значения.
+type ActQuestionUser = { temp: { step: number; actNumber: number; data: Partial<ActInput> } };
+type ActResultsUser = Pick<UserData, 'telegramId' | 'city' | 'restaurant'> & {
+  temp: Record<string, unknown> & { fishType: string; actNumber: number; data: ActInput };
+};
 
 export const registerActHandlers = (bot: Telegraf<Context>) => {
   // Начало заполнения акта (выбор рыбы через inline-кнопку)
@@ -98,7 +105,7 @@ export const registerActHandlers = (bot: Telegraf<Context>) => {
   });
 };
 
-const askActQuestion = async (ctx: Context, user: any) => {
+const askActQuestion = async (ctx: Context, user: ActQuestionUser) => {
   const { step, data, actNumber } = user.temp;
 
   const questions: Record<number, string> = {
@@ -118,7 +125,7 @@ const askActQuestion = async (ctx: Context, user: any) => {
   });
 };
 
-const showActResults = async (ctx: Context, user: any) => {
+const showActResults = async (ctx: Context, user: ActResultsUser) => {
   const { fishType, actNumber, data } = user.temp;
 
   const metrics = calculateActMetrics(data);

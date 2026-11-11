@@ -2,7 +2,7 @@ import mongoose, { Document, Model } from 'mongoose';
 import { ActData } from './types/index.js';
 
 export interface ActDocument extends ActData, Document {}
-export interface ActModel extends Model<ActDocument> {}
+export type ActModel = Model<ActDocument>;
 
 const actSchema = new mongoose.Schema<ActDocument>(
   {
