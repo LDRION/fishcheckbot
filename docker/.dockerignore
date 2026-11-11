@@ -1,0 +1,20 @@
+# Исключаем из образа лишние файлы
+node_modules
+npm-debug.log
+.git
+.github
+.vscode
+.idea
+*.md
+*.env
+!node_modules/.pnpm
+
+# Локальные артефакты сборки
+dist
+coverage
+logs
+
+# Тесты не нужны в production-образе
+tests
+*.test.ts
+vitest.config.ts

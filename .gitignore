@@ -2,7 +2,8 @@
 .env
 *.env
 google-sheets-credentials.json
-*.json
+*credentials*.json
+*service-account*.json
 
 # ==================== LOGS ====================
 logs/
@@ -20,7 +21,6 @@ build/
 
 # ==================== DOCKER ====================
 docker-compose.override.yml
-*.dockerignore
 
 # ==================== EDITOR ====================
 .vscode/
