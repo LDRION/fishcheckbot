@@ -66,4 +66,5 @@ docker compose -f docker/docker-compose.yml up -d --build
 
 ## Лицензия
 
-[MIT](LICENSE)
+Все права защищены: код открыт для ознакомления, использовать его без разрешения автора нельзя. Подробности — в [LICENSE](LICENSE).
+

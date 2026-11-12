@@ -23,7 +23,7 @@
     "telegraf"
   ],
   "author": "LDRION",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "engines": {
     "node": ">=20.0.0"
   },
